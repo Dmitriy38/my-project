@@ -1,6 +1,6 @@
 !#/bin/bash
 
-name="Dmitriy"
+name="Dima"
 
 echo "Hi, $name!"
 
