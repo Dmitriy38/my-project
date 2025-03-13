@@ -4,4 +4,6 @@ name="Dmitriy"
 
 echo "Hi, $name!"
 
+echo "You new"
+
 
