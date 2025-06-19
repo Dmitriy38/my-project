@@ -1,0 +1,24 @@
+stages:
+    -test
+    -build
+
+unit test:
+     stage: test
+     script:
+         - echo "test 1"
+
+linter:
+    stage: test
+    script:
+        - echo "test 2"
+
+type test:
+    stage: test
+    script:
+        - echo "test 3"
+
+build:
+    stage: build
+    script:
+        - ./buld.sh
+
