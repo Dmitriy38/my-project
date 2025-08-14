@@ -43,15 +43,6 @@ deploy website:
         - master
         - /^release.*$/
 
-deploy prod:
-  stage: prod
-  script:
-    - echo 'running ./build.sh'
-  when: manual
-      only:
-      refs:
-        - tags
-        - master
-        - /^release.*$/
+
 
 
