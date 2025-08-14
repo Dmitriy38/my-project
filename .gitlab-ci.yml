@@ -2,8 +2,6 @@ stages:
   - build
   - test2
   - dev
-  - stage
-  - prod
 
 install_env:
   stage: test
@@ -31,7 +29,7 @@ tests_after_build:
     - echo " test after build 1 ---------------"
 
 deploy website:
-  stage: stage
+  stage: dev
   script:
     - cp -rf ./html/* /var/www/html
   when: manual
