@@ -25,7 +25,7 @@ linters::
 build: 
     stage: build
     script:
-    - echo 'running ./build.sh''
+    - echo 'running ./build.sh'
 
 test_after_build:
   stage : test2
