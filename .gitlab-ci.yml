@@ -22,7 +22,7 @@ linters::
   script: 
   - echo " test linter ---------"
 
-  build: 
+build: 
     stage: build
     script:
     - echo 'running ./build.sh''
@@ -43,7 +43,7 @@ deploy dev:
         - master
         - /^release.*$/
 
-  deploy stage:
+deploy stage:
   stage : dev 
   script: 
     - echo 'running ./build.sh'
@@ -54,7 +54,7 @@ deploy dev:
         - master
         - /^release.*$/
 
-  deploy prod:
+deploy prod:
     stage: prod 
     script: 
     - echo 'running ./build.sh'
