@@ -34,7 +34,7 @@ test_after_build:
 deploy website:
   stage : stage 
   script: 
-    - cp -rf ./Introduction_to_CD/html/* /var/www/html
+    - sudo cp -rf ./Introduction_to_CD/html/* /var/www/html
   when: manual
   tags:
     - stage-shell
