@@ -48,7 +48,6 @@ deploy website:
 auto_refresh:
   stage: autoobnova
   script:
-    - echo "Добавляем скрипт автообновления"
     - echo '<script>setTimeout(()=>location.reload(),30000)</script>' >> /var/www/html/index.html
   only:
     - master
