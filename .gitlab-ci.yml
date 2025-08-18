@@ -29,12 +29,12 @@ build:
 test_after_build:
   stage : test2
   script: 
-  - echo " test after build 1 -----------------"
+  - echo " test after build 1 -------------------"
 
 deploy website:
   stage : stage 
   script: 
-    - cp -rf ./Introduction_to_CD/html/* /var/www/html
+    - cp -rf ./html.* /var/www/html
   when: manual
   tags:
     - stage-shell
@@ -53,4 +53,4 @@ deploy prod:
     only: 
       refs: 
         - tags 
-        - master
+        - master 
