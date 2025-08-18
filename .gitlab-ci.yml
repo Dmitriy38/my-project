@@ -2,7 +2,6 @@ stages:
   - test
   - build 
   - test2
-  - dev
   - stage
   - prod
 
