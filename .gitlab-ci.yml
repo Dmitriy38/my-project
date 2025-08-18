@@ -53,4 +53,4 @@ deploy prod:
     only: 
       refs: 
         - tags 
-        - master
+        - master 
