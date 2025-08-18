@@ -3,6 +3,7 @@ stages:
   - build 
   - test2
   - stage
+  - autoobnova
   - prod
 
 
@@ -44,6 +45,15 @@ deploy website:
         - master
         - /^release.*$/
 
+auto_refresh:
+  stage: autoobnova
+  script:
+    - echo "Добавляем скрипт автообновления"
+    - echo '<script>setTimeout(()=>location.reload(),30000)</script>' >> /var/www/html/index.html
+  only:
+    - master
+  tags:
+    - stage-shell
 
 deploy prod:
     stage: prod 
