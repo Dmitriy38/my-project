@@ -36,7 +36,7 @@ deploy website:
   stage : stage 
   script: 
     - cp -rf ./html.* /var/www/html
-  #when: manual
+  when: manual
   tags:
     - stage-shell
   only: 
@@ -45,20 +45,12 @@ deploy website:
         - master
         - /^release.*$/
 
-auto_refresh:
-  stage: autoobnova
-  script:
-    - echo '<script>setTimeout(()=>location.reload(),30000)</script>' >> /var/www/html/index.html
-  only:
-    - master
-  tags:
-    - stage-shell
 
 deploy prod:
     stage: prod 
     script: 
     - echo 'running ./build.sh'
-    #when: manual
+    when: manual
     only: 
       refs: 
         - tags 
