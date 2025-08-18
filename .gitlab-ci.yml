@@ -34,7 +34,7 @@ test_after_build:
 deploy website:
   stage : stage 
   script: 
-    - cp -rf /devops-engineer-basics/Introduction_to_CD/html.* /var/www/html
+    - cp -rf ./html.* /var/www/html
   when: manual
   tags:
     - stage-shell
