@@ -1,0 +1,2 @@
+[frontend_servers]
+reactjs_1 ansible_host=34.194.1.56 ansible_user=ubuntu ansible_ssh_private_key=~/.ssh/id_rsa
