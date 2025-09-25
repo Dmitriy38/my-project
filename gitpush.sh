@@ -2,6 +2,6 @@
 
 git add .
 
-git commit -m "new commit"
+git commit -m "new auto commit"
 
 git push 
