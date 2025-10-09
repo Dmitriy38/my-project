@@ -1,0 +1,19 @@
+---
+- hosts: localhost                           # Указываем хост, на котором отработает плейбук
+  tasks:                                     # Указываем список задач.
+# Первой задачей соберём Docker образ nginx с картинкой на веб-странице.
+  - name: Build an image                     
+    community.docker.docker_image:           # Используем модуль docker.docker_image.
+      name: myimage:latest                   # Указываем название:тег будущего образа.
+      build:                                 # Указываем путь до места сборки с Dockerfile.
+        path: .
+      source: build
+
+# Второй задачей запускаем собранный Docker образ.
+  - name: Create a data container
+    community.docker.docker_container:       # Используем модуль docker.docker_container
+      name: example-container                # Выбираем название будущего контейнера.
+      image: myimage:latest                  # Указываем название образа, который собрали в первой задаче.
+      published_ports: 80:80                 # Указываем порты, которые нужно перенаправить из контейнера.
+
+# После отработки плейбука можно зайти на localhost (127.0.0.1:80) и увидеть веб-страницу.
