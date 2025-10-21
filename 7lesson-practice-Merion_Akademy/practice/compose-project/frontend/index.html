@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Статистические данные о COVID-19</title>
+    <link rel="stylesheet" href="pure-min.css">
+    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <form id="update-form" class="pure-form pure-form-stacked">
+      <fieldset>
+        <legend>Обновить данные</legend>
+        <span id="update-msg" class="pure-form-message">Дата последнего обновления</span>
+        <span id="allready-update-msg" class="pure-form-message" hidden>Уже обновляется</span>
+        <button type="submit" id="update-btn" class="pure-button">Обновить</button>
+      </fieldset>
+    </form>
+    <form id="filter-form" class="pure-form">
+      <fieldset>
+        <legend>Отобразить данные</legend>
+        <select id="country-sel">
+          <option value="" disabled selected>Выберите страну</option>
+        </select>
+        <select id="sort-order-sel">
+          <option value="" disabled selected>Выберите порядок сортировки</option>
+          <option value="deaths" selected>По смертности</option>
+          <option value="dates" selected>По датам</option>
+        </select>
+        <button type="submit" id="request-btn" class="pure-form pure-button-primary">Ok</button>
+    </form>
+    <h3>Статистические данные:</h3>
+    <div id="data-div">
+      <table>
+        <caption>COVID-19 Statistics</caption>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Country code</th>
+            <th>Confirmed</th>
+            <th>Deaths</th>
+            <th>Stringency actual</th>
+            <th>Stringency</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
+

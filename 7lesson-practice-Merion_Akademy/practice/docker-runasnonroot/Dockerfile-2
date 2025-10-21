@@ -1,0 +1,4 @@
+FROM alpine:3.15
+RUN adduser --disabled-password merion
+WORKDIR /home/merion
+USER merion

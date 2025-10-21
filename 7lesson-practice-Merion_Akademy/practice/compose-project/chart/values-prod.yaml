@@ -1,0 +1,26 @@
+backendEnv:
+  engine: POSTGRESQL
+  db: statdb
+  user: 'psqladmin@pgs-alzver-proj.privatelink.postgres.database.azure.com'
+  port: 5432
+  host: 'pgs-alzver-proj.privatelink.postgres.database.azure.com'
+  args: '--auth-host=scram-sha-256'
+  nodeenv: 'production'
+
+backendHPA:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  averageCPU: 60
+
+frontendHPA:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  averageCPU: 60
+
+ingressController:
+  port: 80
+
+---
+

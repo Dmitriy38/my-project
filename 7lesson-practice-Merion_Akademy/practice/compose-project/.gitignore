@@ -1,0 +1,15 @@
+/backend/venv
+/backedn/.vscode
+*.env
+__pycache__/
+*.py[cod]
+db.sqlite3
+*.tfvars
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.lock.hcl
+dbsec.txt
+01-secret.yaml
+node_modules
+backend/src/database.sqlite3

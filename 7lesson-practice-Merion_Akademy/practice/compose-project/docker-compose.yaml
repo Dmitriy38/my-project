@@ -1,0 +1,63 @@
+version: '3.4'
+
+services:
+  reverseproxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./traefik
+    ports:
+      - "8000:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    depends_on:
+      - frontend
+      - backend
+      - db
+
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.router1.rule=PathPrefix(`/`)
+
+  backend:
+    env_file: environment.env
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.routers0.rule=PathPrefix(`/api/`)
+      - traefik.port=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - migration
+
+  migration:
+    env_file: environment.env
+    build: 
+      dockerfile: Dockerfile
+      context: ./backend
+    command: ["npm", "run", "migrate"]
+    depends_on:
+      - db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+
+  db:
+    env_file: environment.env
+    image: postgres:11.14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data:
+
