@@ -1,0 +1,9 @@
+FROM alpine
+
+RUN apk add --update-cache
+RUN apk add python3 
+RUN apk add python3-dev
+RUN apk add py-pip
+RUN apk add build-base
+RUN rm -rf /var/cache/apk/*
+
