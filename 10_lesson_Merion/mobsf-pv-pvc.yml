@@ -1,0 +1,37 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mobsf-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: /home/ubuntu/mobsf/
+    type: ''
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    kind: PersistentVolumeClaim
+    namespace: mobsf
+    name: mobsf-pvc
+    apiVersion: v1
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mobsf-pvc
+  namespace: mobsf
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: mobsf-pv
+  volumeMode: Filesystem
