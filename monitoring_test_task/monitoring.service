@@ -1,0 +1,15 @@
+[Unit]
+Description=Monitoring service for test process
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /usr/local/bin/monitoring.sh
+User=root
+Group=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
