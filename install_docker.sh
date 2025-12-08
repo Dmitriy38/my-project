@@ -17,11 +17,7 @@ EOF
 sudo apt update
 
 sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo systemctl status docker
-
-sudo systemctl start docker
-
+#добавления зеркала 
 sudo mkdir /etc/docker/daemon.json > /dev/null << 'EOF'
 {
   "registry-mirrors": [
@@ -30,8 +26,6 @@ sudo mkdir /etc/docker/daemon.json > /dev/null << 'EOF'
   ]
 }
 EOF
-
-sudo systemctl status docker
 
 sudo systemctl start docker
 #Создание группы docker, если её нет
