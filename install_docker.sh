@@ -21,3 +21,18 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 sudo systemctl status docker
 
 sudo systemctl start docker
+
+sudo mkdir /etc/docker/daemon.json > /dev/null << 'EOF'
+{
+  "registry-mirrors": [
+    "https://mirror.gr.to",
+    "https://cr.yandex/mirror"
+  ]
+}
+EOF
+
+sudo systemctl status docker
+
+sudo systemctl start docker
+
+sudo docker run hello-world
