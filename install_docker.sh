@@ -1,4 +1,5 @@
 #установка докера для Linux системы под ubuntu, 
+chmod +x install_docker.sh
 
 sudo apt-get update
 
