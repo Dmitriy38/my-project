@@ -34,5 +34,13 @@ EOF
 sudo systemctl status docker
 
 sudo systemctl start docker
-
+#Создание группы docker, если её нет
+sudo groupadd docker 2>/dev/null || true
+# Добавление текущего пользователя в группу docker
+sudo usermod -aG docker $USER
+# Применение изменений групп без перезагрузки (для текущей сессии)
+newgrp docker << EONG
+echo "Пользователь $USER добавлен в группу docker"
+EONG
+#запускаем тестовый контейнер приветственный 
 sudo docker run hello-world
