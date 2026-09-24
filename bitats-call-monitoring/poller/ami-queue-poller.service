@@ -1,0 +1,15 @@
+[Unit]
+Description=AMI Queue Poller for Grafana RT
+After=network.target mysql.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/ami-queue-poller.env
+ExecStart=/usr/bin/python3 /opt/ami_queue_poller.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

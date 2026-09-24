@@ -1,0 +1,17 @@
+# /etc/bitpbx/pbxanalytics.conf (шаблон, пароли заменить на свои)
+RAWDATA_HOSTNAME = localhost
+RAWDATA_DBNAME = pbxanalytics
+RAWDATA_TABLENAME = rawdata
+RAWDATA_LOGIN = analyticsUser
+RAWDATA_PASSWORD = CHANGE_ME
+
+ANALYTIC_HOSTNAME = localhost
+ANALYTIC_DBNAME = pbxanalytics
+ANALYTIC_TABLENAME = analytics
+ANALYTIC_LOGIN = analyticsUser
+ANALYTIC_PASSWORD = CHANGE_ME
+
+LOG_DIR = /var/log/bitpbx/analytics
+RAWDATA_STORE_DAYS = 30
+RAWDATA_CLEANING_HOUR = 23
+RAWDATA_CLEANING_MINUTE = 18

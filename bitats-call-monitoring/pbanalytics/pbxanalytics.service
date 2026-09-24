@@ -1,0 +1,13 @@
+[Unit]
+Description=pbxanalytics
+After=mysql.service
+Requires=mysql.service
+
+[Service]
+Type=simple
+User=asterisk
+ExecStart=/usr/bin/java -Xmx16M -jar /var/www/pbxanalytics/pbxanalytics.jar /etc/bitpbx/pbxanalytics.conf
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
