@@ -1,40 +1,35 @@
-# Add Docker's official GPG key:
-sudo apt update
-sudo apt install ca-certificates curl
+#!/bin/bash
+
+# 1. Удаление старых конфликтующих пакетов (на всякий случай)
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove -y $pkg; done
+
+# 2. Установка базовых зависимостей
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+
+# 3. Создание директории для ключей и скачивание официального GPG-ключа Docker
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# Add the repository to Apt sources:
-sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
-Components: stable
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
+# 4. Добавление репозитория Docker в источники APT
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-sudo apt update
+# 5. Обновление индексов пакетов и установка Docker
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-#добавления зеркала 
-sudo mkdir /etc/docker/daemon.json > /dev/null << 'EOF'
-{
-  "registry-mirrors": [
-    "https://mirror.gr.to",
-    "https://cr.yandex/mirror"
-  ]
-}
-EOF
-
-sudo systemctl start docker
-#Создание группы docker, если её нет
-sudo groupadd docker 2>/dev/null || true
-# Добавление текущего пользователя в группу docker
+# 6. Добавление текущего пользователя в группу docker (чтобы не использовать sudo docker)
+if ! getent group docker > /dev/null; then
+    sudo groupadd docker
+fi
 sudo usermod -aG docker $USER
-# Применение изменений групп без перезагрузки (для текущей сессии)
-newgrp docker << EONG
-echo "Пользователь $USER добавлен в группу docker"
-EONG
-#запускаем тестовый контейнер приветственный 
-sudo docker run hello-world
+
+# 7. Включение автозапуска службы
+sudo systemctl enable docker
+sudo systemctl start docker
+
+echo "Установка завершена! Выйдите из системы (logout) и зайдите снова, чтобы применились права группы docker."
