@@ -1,0 +1,155 @@
+Snipe-it
+Шаг 1. Установка Docker (если еще нет)
+Выполните на вашем сервере Ubuntu 24.04:
+
+Bash
+sudo apt update
+sudo apt install docker.io docker-compose-v2 -y
+sudo systemctl enable --now docker
+
+Шаг 2. Подготовка директории
+Создадим папку, где будут лежать конфигурации:
+
+Bash
+sudo mkdir -p /opt/snipe-it
+cd /opt/snipe-it
+
+Шаг 3. Создание файла переменных (.env)
+Создайте файл .env. В нем хранятся все пароли и настройки. Обязательно сгенерируйте APP_KEY (он нужен для шифрования данных).
+
+Сначала сгенерируйте ключ командой:
+
+Bash
+echo "base64:$(openssl rand -base64 32)"
+
+base64:GykCEQg7YPugUT6PY3H5ujtHouA8vS/aqSn6ZKZovOc=
+
+Создаем файл: nano .env
+
+# Базовые настройки
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=СЮДА_ВСТАВЬТЕ_СГЕНЕРИРОВАННЫЙ_КЛЮЧ
+APP_URL=http://YOUR_SERVER_IP:8080
+APP_TIMEZONE=Europe/Moscow
+APP_LOCALE=ru
+
+# Настройки базы данных (эти же данные будут в docker-compose.yml)
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=snipeit
+DB_USERNAME=snipeit_user
+DB_PASSWORD=SuperStrongPassword123!
+
+# Настройки Redis (кэш и сессии)
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_DRIVER=redis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Почту (SMTP) можно настроить позже, пока оставляем пустой
+MAIL_DRIVER=log
+
+Шаг 4. Создание docker-compose.yml
+В этой же папке создаем файл компоуза.
+
+Создаем файл: nano docker-compose.yml
+
+YAML
+services:
+  snipe-it:
+    image: snipe/snipe-it:latest
+    container_name: snipe-it
+    ports:
+      - "8080:80" # Внешний порт 8080, внутренний 80
+    env_file:
+      - .env
+    volumes:
+      - snipeit_data:/var/lib/snipeit # Сохраняем загрузки, картинки, ключи
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: mariadb:10.11
+    container_name: snipe-it-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=RootSecretPassword!
+      - MYSQL_DATABASE=snipeit
+      - MYSQL_USER=snipeit_user
+      - MYSQL_PASSWORD=SuperStrongPassword123!
+    volumes:
+      - db_data:/var/lib/mysql # Сохраняем саму базу данных (важно!)
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: snipe-it-redis
+    volumes:
+      - redis_data:/data # Сохраняем кэш и сессии
+    restart: unless-stopped
+
+# Объявляем тома (Volumes) для персистентности данных
+volumes:
+  snipeit_data:
+  db_data:
+  redis_data:
+  
+  Шаг 5. Запуск
+Теперь запускаем всё в фоновом режиме:
+
+Bash
+docker compose up -d
+
+если проблема 
+ docker compose up -d
+[+] Running 3/3
+ ! db             Interrupted                                                                10.0s
+ ! redis          Interrupted                                                                10.0s
+ ✘ snipe-it Error failed to resolve reference "docker.io/snipe/snipe-it:la...                10.0s
+Error response from daemon: failed to resolve reference "docker.io/snipe/snipe-it:latest": failed t                                                                                                         o do request: Head "https://registry-1.docker.io/v2/snipe/snipe-it/manifests/latest": dial tcp [260                                                                                                         0:1f18:2148:bc00:71c4:c9d9:d870:c94e]:443: connect: network is unreachable
+
+Решение
+1. Создайте или отредактируйте конфигурационный файл Docker:
+sudo nano /etc/docker/daemon.json
+
+2. Вставьте в него следующий код:
+(Если файл был пустой, просто вставляйте всё как есть)
+
+JSON
+{
+  "registry-mirrors": [
+    "https://huecker.io",
+    "https://dockerhub.timeweb.cloud",
+    "https://mirror.gcr.io"
+  ]
+}
+
+3. Перезапустите службу Docker:
+
+Bash
+sudo systemctl restart docker
+4. Повторите запуск:
+
+Bash
+docker compose up -d
+
+Открываем веб-интерфейс Snipe-IT
+Теперь перейдите в браузере по адресу вашей виртуальной машины с указанием порта 8080:
+http://IP_АДРЕС_ВАШЕЙ_ВМ:8080
+
+оздание вашей учетной записи главного администратора и базовых настроек системы. 
+Вот как лучше заполнить эти поля:Название сайта: Впишите название вашей компании или отдела, например «Учет IT-оборудования ООО "Ромашка"» (вместо стандартного "Snipe-IT Asset Management").   
+Имя и Фамилия: Впишите свои реальные данные (вместо "Jane Smith").   
+Электронная почта: Обязательно сотрите надпись ${MAIL_ENV_FROM_ADDR} и впишите свой рабочий email. 
+Эта странная надпись появилась, потому что мы пока не настраивали почтовый сервер (SMTP) в файле .env.  
+Имя Пользователя: Задайте логин для входа (например, admin или ваш стандартный логин вместо "jsmith").   
+Пароль и Подтверждение пароля: Придумайте надежный пароль.   
+Чекбокс "Отправить мои учетные данные...": Оставьте пустым, так как почта у нас пока не настроена, письмо всё равно не уйдет.   
+Префикс: (Необязательно) Если у вас на 200+ АРМ будут клеиться штрихкоды, удобно задать префикс, например IT- или PC-.Длина инвентарного номера: 5 — вполне достаточно (хватит до 99999 устройств).   
+Генерировать метки активов авто увеличением: Рекомендую поставить галочку. Тогда при добавлении нового монитора или ПК система сама предложит следующий номер (например, IT-00001, IT-00002 и т.д.).   
+Полная поддержка нескольких компаний: Не ставьте, если у вас всё оборудование числится за одним юридическим лицом.   Язык по умолчанию: Уже стоит "Русский", оставляем.   Валюта по-умолчанию: Замените "USD" на RUB (или вашу местную валюту), чтобы корректно считать стоимость техники.   
