@@ -24,6 +24,11 @@ Self-hosted Bitwarden-совместимый сервер в закрытой с
 
 **Стек:** Asterisk (BitATS/BitPBX), MySQL/MariaDB, Python 3, Zabbix 7.0, Grafana, systemd
 
+### [Snipe-IT: учёт IT-оборудования и лицензий](snipe-it-runbook/)
+Open-source система учёта IT-активов (ноутбуки, мониторы, лицензии на ПО) в Docker: Snipe-IT, MariaDB и Redis. Отдельно разобрана проблема с недоступностью Docker Hub напрямую и обход через зеркала реестра.
+
+**Стек:** Docker, Docker Compose, MariaDB, Redis
+
 ## Об авторе
 
 Дмитрий Попов, системный администратор, Иркутск. развиваюсь в сторону DevOps-инженера.
