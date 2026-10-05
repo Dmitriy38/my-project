@@ -1,0 +1,38 @@
+services:
+  snipe-it:
+    image: snipe/snipe-it:latest
+    container_name: snipe-it
+    ports:
+      - "8080:80"   # Внешний порт 8080, внутренний 80
+    env_file:
+      - .env
+    volumes:
+      - snipeit_data:/var/lib/snipeit   # Загрузки, картинки, ключи
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: mariadb:10.11
+    container_name: snipe-it-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql   # Сама база данных (важно!)
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: snipe-it-redis
+    volumes:
+      - redis_data:/data   # Кэш и сессии
+    restart: unless-stopped
+
+volumes:
+  snipeit_data:
+  db_data:
+  redis_data:
